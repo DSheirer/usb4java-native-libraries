@@ -1,76 +1,54 @@
 plugins {
-    id 'java'
-    id 'java-library'
-    id 'maven-publish'
-    id 'signing'
+    id('java')
+    id("maven-publish")
+    id("org.danilopianini.publish-on-central") version "9.1.8"
 }
 
 group = "io.github.dsheirer"
 version = "1.3.2"
+description = 'Additional native libraries for usb4Java library'
+
+//How to use.  I'm not even sure if these are the right steps or if there is an easier way
+//to do this.
+//1. publish
+//2. validateMavenCentralPortalPublication
+//3. zipMavenCentralPortalPublication
+//4. celeaseMavenCentralPortalPublication
+
+publishOnCentral {
+    repoOwner.set("DSheirer")
+    projectDescription.set("Additional native libraries for usb4Java library")
+    // The following values are the default, if they are ok with you, just omit them
+    projectLongName.set(project.name)
+    licenseName.set("Apache License, Version 2.0")
+    licenseUrl.set("http://www.apache.org/licenses/LICENSE-2.0")
+    projectUrl.set("https://github.com/${repoOwner.get()}/${project.name}")
+    scmConnection.set("scm:git:https://github.com/${repoOwner.get()}/${project.name}")
+}
 
 publishing {
     publications {
-        mavenJava(MavenPublication) {
-            artifactId 'usb4java-native-libraries'
-            from components.java
-//            artifact packageSources
-//            artifact packageJavadoc
-
-            versionMapping {
-                usage('java-api') {
-                    fromResolutionOf('runtimeClasspath')
-                }
-                usage('java-runtime') {
-                    fromResolutionResult()
-                }
-            }
+        withType(MavenPublication) {
             pom {
-                name = 'usb4java additional native libraries'
-                description = 'Additional native libraries for usb4Java library'
-                url = 'https://github.com/DSheirer/usb4java-native-libraries'
-                licenses {
-                    license {
-                        name = 'GNU General Public License, Version 3.0'
-                        url = 'https://www.gnu.org/licenses/gpl-3.0.en.html'
-                    }
-                }
-
                 developers {
                     developer {
-                        id = 'dsheirer'
-                        name = 'Dennis Sheirer'
-                        email = 'dsheirer@sonatype.com'
-                        organizationUrl = 'https://github.com/DSheirer'
+                        name.set("Dennis Sheirer")
+                        email.set("dennis.sheirer@sonatype.com")
+                        url.set("https://github.com/DSheirer")
                     }
                 }
-                scm {
-                    connection = 'scm:git:git://github.com/DSheirer/usb4java-native-libraries'
-                    developerConnection = 'scm:git:ssh://github.com/DSheirer/usb4java-native-libraries.git'
-                    url = 'https://github.com/DSheirer/usb4java-native-libraries/tree/master'
-                }
-            }
-        }
-    }
-    repositories {
-        maven {
-            def releasesRepoUrl = "https://oss.sonatype.org/service/local/staging/deploy/maven2/"
-            def snapshotsRepoUrl = "https://oss.sonatype.org/content/repositories/snapshots/"
-            url = version.endsWith('SNAPSHOT') ? snapshotsRepoUrl : releasesRepoUrl
-            credentials {
-                username = ossrhUsername
-                password = ossrhPassword
             }
         }
     }
 }
 
 signing {
-    sign publishing.publications.mavenJava
+    sign publishing.publications.OSSRH
 }
 
 jar {
     manifest {
-        attributes 'Implementation-Title': "${project.archivesBaseName}",
+        attributes 'Implementation-Title': "${project.name}",
                 'Implementation-Version': archiveVersion
     }
 }
