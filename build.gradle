@@ -5,15 +5,14 @@ plugins {
 }
 
 group = "io.github.dsheirer"
-version = "1.3.2"
+version = "1.3.3"
 description = 'Additional native libraries for usb4Java library'
 
 //How to use.  I'm not even sure if these are the right steps or if there is an easier way
 //to do this.
 //1. publish
-//2. validateMavenCentralPortalPublication
-//3. zipMavenCentralPortalPublication
-//4. celeaseMavenCentralPortalPublication
+//2. zipMavenCentralPortalPublication
+//3. releaseMavenCentralPortalPublication
 
 publishOnCentral {
     repoOwner.set("DSheirer")
